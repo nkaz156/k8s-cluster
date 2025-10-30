@@ -47,6 +47,7 @@ helm get values cilium -n kube-system > /tmp/current-cilium-values.yaml
 flux create helmrelease cilium \
     --interval=5m \
     --source=HelmRepository/cilium \
+    --target-namespace=kube-system \
     --chart=cilium \
     --chart-version="1.18.3" \
     --values=/tmp/current-cilium-values.yaml \
@@ -58,9 +59,9 @@ flux create helmrelease cilium \
 flux bootstrap github \
     --token-auth \
     --owner nkaz156 \
-    --personal \ # denotes that owner is a GitHub user, as opposed to GitHub organization
+    --personal \
     --repository k8s-cluster \
     --branch main \
-    --path ./flux-managed # Path Flux will manage, drop if using entire repo
+    --path ./flux-managed 
 ```
 

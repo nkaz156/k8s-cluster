@@ -14,6 +14,8 @@ spec:
         name: cilium
       version: 1.18.3
   interval: 5m0s
+  storageNamespace: kube-system
+  targetNamespace: kube-system
   values:
     USER-SUPPLIED VALUES: null
     cgroup:
