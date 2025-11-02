@@ -16,3 +16,7 @@ spec:
   interval: 1m0s
   storageNamespace: longhorn-system
   targetNamespace: longhorn-system
+values:
+  defaultSettings:
+    defaultDataPath: /var/mnt/longhorn
+
