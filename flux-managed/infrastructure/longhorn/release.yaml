@@ -18,5 +18,5 @@ spec:
   targetNamespace: longhorn-system
 values:
   defaultSettings:
-    defaultDataPath: /var/mnt/longhorn
+    defaultDataPath: "/var/mnt/longhorn"
 
