@@ -17,6 +17,8 @@ spec:
   storageNamespace: kube-system
   targetNamespace: kube-system
   values:
+    crds:
+      enabled: true
     USER-SUPPLIED VALUES: null
     cgroup:
       autoMount:

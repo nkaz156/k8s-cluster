@@ -13,7 +13,7 @@ spec:
         kind: HelmRepository
         name: longhorn-repo
       version: v1.9.0
-  interval: 1m0s
+  interval: 5m0s
   storageNamespace: longhorn-system
   targetNamespace: longhorn-system
   values:
