@@ -4,7 +4,7 @@ metadata:
   name: authentik-postgresql
   namespace: authentik
 spec:
-  image: ghcr.io/cloudnative-pg/postgresql:18.0-202511030807-minimal-trixie@sha256:b5049f6187822761e6766e1135e224046eff09ee11aa5552976d2056c85a8806
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.0-202511030807-minimal-trixie@sha256:b5049f6187822761e6766e1135e224046eff09ee11aa5552976d2056c85a8806
   instances: 3
   managed:
     services:
