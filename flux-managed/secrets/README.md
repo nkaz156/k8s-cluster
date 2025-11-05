@@ -88,6 +88,7 @@ spec:
 
 ```bash
 kubectl create secret generic sops-age \
+  --namespace=flux-system \
   --from-file=age.agekey=keys.txt
 ```
 Where `keys.txt` is the file containing your Age private key on your local machine and `age.agekey` is the name of the file on the k8s cluster. The file on the cluster is required to be `age.agekey` exactly for flux to work.

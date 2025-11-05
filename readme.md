@@ -1,12 +1,11 @@
 # Cluster GitOps repo:
 This repo is for an already bootstrapped cluster. It uses Cilium as a CNI and kube-proxy replacement, and Flux to manage deployment of software. It also uses Cilium as a gatewayAPI provider and as a load balancer via L2 announcements (I'll get around to BGP sometime when I get a better router).
 
-The goal is to have a pseudo-production cluster that can hum along for months on end without needing maintenance, with only the necessary compromises to run on cheap hardware. Thus far, that has only been in using L2 instead of BGP, but I'm only getting started
+The goal is to have a pseudo-production cluster that can hum along for months on end without needing maintenance, with only the necessary compromises to run on cheap hardware.
 
-## Services (Planned)
-- authentik
-- cert-resolver
-- vikunja
+Helpful resources:
+- [Kubesearch](https://kubesearch.dev/)
+
 
 
 
