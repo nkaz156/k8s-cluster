@@ -108,6 +108,18 @@ kubectl label namespace cilium-test-1 \
 cilium connectivity test
 ```
 
+## Helpful commands quick reference:
+
+Clear a namespace stuck on 'Terminating:'
+
+```bash
+kubectl get namespace longhorn-system -o json \
+  | jq '.spec.finalizers = []' \
+  | kubectl replace --raw /api/v1/namespaces/longhorn-system/finalize -f -
+  ```
+
+Remember to replace `longhorn-system` with whatever the name of the problem namespace is.
+
 
 ## Credits:
  - https://blog.kammel.dev/post/k8s_home_lab_2025_01/
