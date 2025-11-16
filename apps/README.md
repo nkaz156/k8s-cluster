@@ -1,0 +1,1 @@
+This folder is for any user-facing apps. I'm mostly putting in this readme to force github to sync the apps file path so that flux doesn't throw an error due to missing directories.
