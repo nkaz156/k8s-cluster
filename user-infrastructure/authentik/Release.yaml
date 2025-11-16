@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: authentik-repo
-      version: 25.10.1
+      version: 2025.10.1
   interval: 10m0s
   storageNamespace: authentik
   targetNamespace: authentik
