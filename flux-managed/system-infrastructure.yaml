@@ -46,11 +46,9 @@ spec:
     provider: sops
     secretRef:
       name: sops-age  # Your age key secret
-    name: flux-system
   wait: true
   dependsOn:
     - name: namespaces
-
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
