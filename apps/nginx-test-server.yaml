@@ -38,6 +38,6 @@ spec:
     app: nginx-test-01
   type: LoadBalancer
   ports:
-  - port: 80
+  - port: 2080
     protocol: TCP
     targetPort: 80
