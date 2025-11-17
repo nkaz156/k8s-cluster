@@ -15,7 +15,7 @@ spec:
     name: flux-system
   wait: true
   dependsOn:
-    - name: system-infrastructure
+    - name: system-infrastructure-configs
   postBuild:
     substituteFrom:
       - kind: Secret
