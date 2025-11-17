@@ -38,6 +38,6 @@ spec:
     app: nginx-test-01
   type: NodePort
   ports:
-  - port: 2080
+  - port: 30800
     protocol: TCP
     targetPort: 80
