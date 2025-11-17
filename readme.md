@@ -133,3 +133,11 @@ Remember to replace `longhorn-system` with whatever the name of the problem name
 
 - Set up the repo such that the path you give to flux only contains kustomizations. This is important for install sequencing.
 - Make sure the install sequencing installs deployments and CRDs before it tries to create the deployment's custom resources. Example: Flux got stuck trying to create a `ClusterIssuer` before installing `cert-manager`. This prompted me to restructure the repo.
+
+
+## Troubleshooting: 
+
+```bash
+kubectl run -it --rm debug --image=busybox --restart=Never -- sh
+```
+creates and removes a busybox pod that you're exec'd into to troubleshoot networking

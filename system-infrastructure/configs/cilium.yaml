@@ -16,3 +16,17 @@ metadata:
 spec:
   blocks:
   - cidr: "192.168.105.1/24"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: service-pool-l2-policy
+  namespace: kube-system
+spec:
+  loadBalancerIPs: true
+  interfaces:
+  - ^eth.*   # Match all eth interfaces, or specify yours like "eth0"
+  # Or if you know the exact interface:
+  # - eth0
+  nodeSelector:
+    matchLabels: {} # Apply to all nodes

@@ -36,8 +36,8 @@ metadata:
 spec:
   selector:
     app: nginx-test-01
-  type: NodePort
+  type: LoadBalancer
   ports:
-  - port: 30800
+  - port: 2080
     protocol: TCP
     targetPort: 80
