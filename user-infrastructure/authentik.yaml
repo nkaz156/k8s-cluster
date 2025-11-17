@@ -1,4 +1,37 @@
 ---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-postgresql
+  namespace: authentik
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.0-202511030807-minimal-trixie@sha256:b5049f6187822761e6766e1135e224046eff09ee11aa5552976d2056c85a8806
+  instances: 3
+  managed:
+    services:
+      disabledDefaultServices: ["ro", "r"]
+    roles:
+      - name: backup
+        passwordSecret:
+          name: postgres-backup-user
+        login: true
+        superuser: false
+        inRoles:
+          - pg_read_all_data
+  bootstrap:
+    initdb:
+      database: authentik
+      owner: authentik
+      secret:
+        name: authentik-postgres-user
+  storage:
+    size: 2Gi
+    storageClass: longhorn
+  postgresql:
+    parameters:
+      max_connections: "200"  
+      shared_buffers: "256MB"  
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
