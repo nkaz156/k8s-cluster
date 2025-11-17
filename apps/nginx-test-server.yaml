@@ -3,7 +3,10 @@ kind: Deployment
 metadata:
   name: nginx-test-01
   namespace: default
+  labels:
+    app: nginx-test-01
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: nginx-test-01
@@ -24,3 +27,17 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-nginx-test-01
+  namespace: default
+spec:
+  selector:
+    app: nginx-test-01
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
