@@ -12,6 +12,11 @@ Helpful resources:
 ## Deploying Cilium (from [Talos docs](https://docs.siderolabs.com/kubernetes-guides/cni/deploying-cilium) and [Cilium docs](https://docs.cilium.io/en/stable/network/l2-announcements/)):
 
 ```bash
+helm repo add cilium https://helm.cilium.io/
+helm repo update
+```
+
+```bash
 helm install \
     cilium \
     cilium/cilium \
@@ -81,7 +86,7 @@ This way we can use the principle of least privilege by only allowing Flux acces
         --personal \
         --repository k8s-cluster \
         --branch main \
-        --path ./flux-managed 
+        --path ./clusters/production-ish
     ```
 
 1. You might have to clear the `GITHUB_TOKEN` environment variable to get flux to ask for a github token. You could also try setting it as an environment variable if that doesn't work.
