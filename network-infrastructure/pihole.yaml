@@ -19,11 +19,16 @@ spec:
   storageNamespace: pihole
   targetNamespace: pihole
   values:
+    admin:
+      existingSecret: pihole-creds
+    image:
+      repository: pihole/pihole
+      tag: 2025.11.0
     dnsmasq:
       customDnsEntries:
-        - address=/Lenovo-01.home.arpa/192.168.100.1
-        - address=/Dell-01.home.arpa/192.168.100.2
-        - address=/Dell-02.home.arpa/192.168.100.3
+        - address=/lenovo-01.home.arpa/192.168.100.1
+        - address=/dell-01.home.arpa/192.168.100.2
+        - address=/dell-02.home.arpa/192.168.100.3
 
       customCnameEntries:
         # - cname=foo.nas,nas
