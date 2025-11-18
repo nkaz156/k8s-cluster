@@ -1,0 +1,49 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pihole
+  namespace: pihole
+spec:
+  chart:
+    spec:
+      chart: pihole
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: mojo2600
+        namespace: flux-system
+      version: 2.34.0
+  interval: 5m0s
+  releaseName: pihole
+  storageNamespace: pihole
+  targetNamespace: pihole
+  values:
+    dnsmasq:
+      customDnsEntries:
+        - address=/Lenovo-01.home.arpa/192.168.100.1
+        - address=/Dell-01.home.arpa/192.168.100.2
+        - address=/Dell-02.home.arpa/192.168.100.3
+
+      customCnameEntries:
+        # - cname=foo.nas,nas
+
+    persistentVolumeClaim:
+      enabled: true
+      size: "1G"
+
+    serviceWeb:
+      loadBalancerIP: 192.168.104.1
+      annotations:
+        "lbipam.cilium.io/ips": "192.168.104.1"
+        "lbipam.cilium.io/sharing-key": "1234"
+      extraLabels: 
+        serviceType: dns
+      type: LoadBalancer
+
+    serviceDns:
+      annotations:
+        "lbipam.cilium.io/sharing-key": "1234"
+      extraLabels: 
+        serviceType: dns
+      type: LoadBalancer

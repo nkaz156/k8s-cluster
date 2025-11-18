@@ -26,7 +26,7 @@ spec:
   loadBalancerIPs: true
   interfaces:
   - ^eth.*   # Match all eth interfaces, or specify yours like "eth0"
-  # Or if you know the exact interface:
-  # - eth0
   nodeSelector:
-    matchLabels: {} # Apply to all nodes
+    matchExpressions: 
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
