@@ -21,7 +21,6 @@ spec:
     crds: CreateReplace
   upgrade:
     crds: CreateReplace
-
   values:
     crds:
       enabled: true
@@ -34,6 +33,8 @@ spec:
       enableAlpn: true
       enableAppProtocol: true
       enabled: true
+      gatewayClass:
+        create: true
     ipam:
       mode: kubernetes
     k8sClientRateLimit:
