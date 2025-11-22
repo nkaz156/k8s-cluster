@@ -34,7 +34,7 @@ spec:
       enableAppProtocol: true
       enabled: true
       gatewayClass:
-        create: true
+        create: "true"
     ipam:
       mode: kubernetes
     k8sClientRateLimit:
