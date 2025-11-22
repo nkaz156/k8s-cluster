@@ -76,6 +76,25 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: crds
+  namespace: flux-system
+spec:
+  interval: 1m
+  retryInterval: 1m
+  timeout: 5m
+  path: ./crds
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  dependsOn:
+    - name: repositories
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: system-infrastructure-controllers
   namespace: flux-system
 spec:
@@ -89,7 +108,7 @@ spec:
     name: flux-system
   wait: true
   dependsOn:
-    - name: repositories
+    - name: crds
   postBuild:
     substituteFrom:
       - kind: Secret
