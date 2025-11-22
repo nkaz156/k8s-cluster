@@ -33,6 +33,8 @@ spec:
       enableAlpn: true
       enableAppProtocol: true
       enabled: true
+      gatewayClass:
+        create: "auto"
     ipam:
       mode: kubernetes
     k8sClientRateLimit:
