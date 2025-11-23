@@ -40,7 +40,7 @@ spec:
 
     serviceWeb:
       loadBalancerIP: 192.168.104.2
-      externalTrafficPolicy: Local
+      externalTrafficPolicy: Cluster
       annotations:
         "lbipam.cilium.io/ips": "192.168.104.2"
       extraLabels: 
