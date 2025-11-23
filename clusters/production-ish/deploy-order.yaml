@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: namespaces
+  name: 01-namespaces
   namespace: flux-system
 spec:
   interval: 1m
@@ -16,25 +16,30 @@ spec:
     name: flux-system
   wait: true
 ---
-# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/source.toolkit.fluxcd.io/gitrepository_v1.json
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
 metadata:
-  name: secrets-repo
+  name: 02-repositories
   namespace: flux-system
 spec:
   interval: 1m
-  url: https://github.com/nkaz156/secrets
-  ref:
-    branch: main
-  secretRef:
-    name: secrets-repo-auth
+  retryInterval: 1m
+  timeout: 5m
+  path: ./repositories
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  dependsOn:
+    - name: 01-namespaces
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: secrets
+  name: 03-secrets
   namespace: flux-system
 spec:
   interval: 1m
@@ -51,32 +56,14 @@ spec:
       name: sops-age  # Your age key secret
   wait: true
   dependsOn:
-    - name: namespaces
+    - name: 02-repositories
+
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: repositories
-  namespace: flux-system
-spec:
-  interval: 1m
-  retryInterval: 1m
-  timeout: 5m
-  path: ./repositories
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  wait: true
-  dependsOn:
-    - name: secrets
----
-# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: crds
+  name: 04-crds
   namespace: flux-system
 spec:
   interval: 1m
@@ -89,13 +76,13 @@ spec:
     name: flux-system
   wait: true
   dependsOn:
-    - name: repositories
+    - name: 03-secrets
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: system-infrastructure-controllers
+  name: 05-system-infrastructure-controllers
   namespace: flux-system
 spec:
   interval: 1m
@@ -108,7 +95,7 @@ spec:
     name: flux-system
   wait: true
   dependsOn:
-    - name: crds
+    - name: 04-crds
   postBuild:
     substituteFrom:
       - kind: Secret
@@ -118,7 +105,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: system-infrastructure-configs
+  name: 06-system-infrastructure-configs
   namespace: flux-system
 spec:
   interval: 1m
@@ -131,7 +118,75 @@ spec:
     name: flux-system
   wait: true
   dependsOn:
-    - name: system-infrastructure-controllers
+    - name: 05-system-infrastructure-controllers
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+---
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: 07-network-infrastructure
+  namespace: flux-system
+spec:
+  interval: 1m
+  retryInterval: 1m
+  timeout: 5m
+  path: ./network-infrastructure
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  dependsOn:
+    - name: 06-system-infrastructure-configs
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+---
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: 08-user-infrastructure
+  namespace: flux-system
+spec:
+  interval: 1m
+  retryInterval: 1m
+  timeout: 5m
+  path: ./user-infrastructure
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  dependsOn:
+    - name: 07-network-infrastructure
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: cluster-secrets
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: 09-apps
+  namespace: flux-system
+spec:
+  interval: 1m
+  retryInterval: 1m
+  timeout: 5m
+  path: ./apps
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  dependsOn:
+    - name: 08-user-infrastructure
   postBuild:
     substituteFrom:
       - kind: Secret
