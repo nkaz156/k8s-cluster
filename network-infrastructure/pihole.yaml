@@ -29,6 +29,7 @@ spec:
         - address=/lenovo-01.home.arpa/192.168.100.1
         - address=/dell-01.home.arpa/192.168.100.2
         - address=/dell-02.home.arpa/192.168.100.3
+        - address=/pihole.home.arpa/192.168.104.2
 
       customCnameEntries:
         # - cname=foo.nas,nas
@@ -38,12 +39,11 @@ spec:
       size: "1G"
 
     serviceWeb:
-      loadBalancerIP: 192.168.104.1
       annotations:
-        "lbipam.cilium.io/ips": "192.168.104.1"
+        "lbipam.cilium.io/ips": "192.168.104.2"
         "lbipam.cilium.io/sharing-key": "1234"
       extraLabels: 
-        serviceType: dns
+        serviceType: dns-admin
       type: LoadBalancer
 
     serviceDns:
