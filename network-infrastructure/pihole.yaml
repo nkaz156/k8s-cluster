@@ -39,6 +39,7 @@ spec:
       size: "1G"
 
     serviceWeb:
+      loadBalancerIP: 192.168.104.2
       annotations:
         "lbipam.cilium.io/ips": "192.168.104.2"
       extraLabels: 
@@ -46,6 +47,7 @@ spec:
       type: LoadBalancer
 
     serviceDns:
+      loadBalancerIP: 192.168.104.1
       annotations:
         "lbipam.cilium.io/ips": "192.168.104.1"
       extraLabels: 
