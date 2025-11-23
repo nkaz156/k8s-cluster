@@ -15,7 +15,7 @@ spec:
 apiVersion: "cilium.io/v2"
 kind: CiliumLoadBalancerIPPool
 metadata:
-  name: "dns-pool"
+  name: "dns-admin-pool"
 spec:
   blocks:
   - cidr: "192.168.104.2/32"
