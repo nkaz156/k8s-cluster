@@ -8,3 +8,8 @@ Sometimes failed cilium pods get stuck and need to be deleted manually (normally
 ```bash
 kubectl delete pods -n kube-system -l io.cilium/app=operator --field-selector status.phase!=Running
 ```
+
+Deleting CRDs en masse:
+```bash
+kubectl get crds | grep longhorn | awk '{print $1}' | xargs kubectl delete crd
+```
