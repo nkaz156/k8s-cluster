@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -36,12 +37,13 @@ metadata:
 spec:
   selector:
     app: nginx-test-01
-  type: LoadBalancer
+  type: ClusterIP
   ports:
-  - port: 2080
+  - port: 80
     protocol: TCP
     targetPort: 80
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/gateway.networking.k8s.io/gateway_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
@@ -53,12 +55,13 @@ spec:
   - name: https-1
     protocol: HTTPS
     port: 443
-    hostname: "nginx-test-01.${INTERNAL_DOMAIN}"
+    hostname: nginx-test-01.${INTERNAL_DOMAIN}
     tls:
       certificateRefs:
        - kind: Secret
          name: wildcard-tls
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/gateway.networking.k8s.io/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -66,7 +69,7 @@ metadata:
   namespace: default
 spec:
   parentRefs:
-  - name: tls-gateway
+  - name: nginx-tls-gateway
     sectionName: https-1
   hostnames:
   - "nginx-test-01.${INTERNAL_DOMAIN}"
@@ -76,5 +79,5 @@ spec:
         type: PathPrefix
         value: /
     backendRefs:
-    - name: nginx-test-01
+    - name: service-nginx-test-01
       port: 80
