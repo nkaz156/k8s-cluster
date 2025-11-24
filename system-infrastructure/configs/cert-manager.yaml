@@ -51,8 +51,8 @@ spec:
   secretTemplate:
     annotations:
       replicator.v1.mittwald.de/replicate-to: "default"
-      # replicator.v1.mittwald.de/replicate-to-matching: >
-      #   replicate-tlscert-to=true
+      replicator.v1.mittwald.de/replicate-to-matching: >
+        ${SERVICE_DOMAIN}/replicate-tlscert-to=true
 
   dnsNames:
   - '${INTERNAL_DOMAIN}'

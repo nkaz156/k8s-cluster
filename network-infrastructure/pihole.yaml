@@ -39,13 +39,16 @@ spec:
       size: "1G"
 
     serviceWeb:
-      loadBalancerIP: 192.168.104.2
-      externalTrafficPolicy: Cluster
-      annotations:
-        "lbipam.cilium.io/ips": "192.168.104.2"
-      extraLabels: 
-        serviceType: dns-admin
-      type: LoadBalancer
+      # loadBalancerIP: 192.168.104.2
+      # externalTrafficPolicy: 
+      # annotations:
+      #   "lbipam.cilium.io/ips": "192.168.104.2"
+      # extraLabels: 
+      #   serviceType: dns-admin
+      https:
+        enabled: false
+      name: pihole-web-service
+      type: ClusterIP
 
     serviceDns:
       loadBalancerIP: 192.168.104.1
@@ -56,3 +59,40 @@ spec:
       extraLabels: 
         serviceType: dns
       type: LoadBalancer
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: pihole-gateway
+  namespace: default
+spec:
+  gatewayClassName: cilium
+  listeners:
+  - name: pihole-https-listener
+    protocol: HTTPS
+    port: 443
+    hostname: pihole.${INTERNAL_DOMAIN}
+    tls:
+      certificateRefs:
+       - kind: Secret
+         name: wildcard-tls
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: pihole-https-route
+  namespace: default
+spec:
+  parentRefs:
+  - name: pihole-gateway
+    sectionName: pihole-https-listener
+  hostnames:
+  - "pihole.${INTERNAL_DOMAIN}"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: pihole-web-service
+      port: 80
