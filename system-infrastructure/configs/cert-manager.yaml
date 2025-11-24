@@ -29,6 +29,12 @@ spec:
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer
+  secretTemplate:
+    annotations:
+      replicator.v1.mittwald.de/replicate-to: "default"
+      # replicator.v1.mittwald.de/replicate-to-matching: >
+      #   replicate-tlscert-to=true
+
   dnsNames:
   - '${INTERNAL_DOMAIN}'
   - '*.${INTERNAL_DOMAIN}'
