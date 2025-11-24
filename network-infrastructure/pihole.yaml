@@ -47,7 +47,7 @@ spec:
       #   serviceType: dns-admin
       https:
         enabled: false
-      name: pihole-web-service
+      name: pihole-web
       type: ClusterIP
 
     serviceDns:
@@ -94,5 +94,5 @@ spec:
         type: PathPrefix
         value: /
     backendRefs:
-    - name: pihole-web-service
+    - name: pihole-web
       port: 80
