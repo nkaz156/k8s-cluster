@@ -19,9 +19,6 @@ metadata:
 spec:
   blocks:
   - cidr: "192.168.104.2/32"
-  serviceSelector:
-    matchLabels:
-      serviceType: dns-admin
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/cilium.io/ciliumloadbalancerippool_v2.json
 apiVersion: "cilium.io/v2"
