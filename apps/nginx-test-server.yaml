@@ -56,4 +56,4 @@ spec:
     tls:
       certificateRefs:
        - kind: Secret
-         name: gateway-tls-secret
+         name: wildcard-tls
