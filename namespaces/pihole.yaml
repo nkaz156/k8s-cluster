@@ -4,4 +4,4 @@ kind: Namespace
 metadata:
   name: pihole
 annotations:
-  - "${SERVICE_DOMAIN}/replicate-tlscert-to=true"
+  ${SERVICE_DOMAIN}/replicate-tlscert-to: true
