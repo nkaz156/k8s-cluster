@@ -9,7 +9,7 @@ spec:
   - cidr: "192.168.104.1/32"
   serviceSelector:
     matchLabels:
-      serviceType: dns
+      cluster.home.arpa/service-type: dns
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/cilium.io/ciliumloadbalancerippool_v2.json
 apiVersion: "cilium.io/v2"
@@ -19,6 +19,9 @@ metadata:
 spec:
   blocks:
   - cidr: "192.168.104.2/32"
+  serviceSelector:
+    matchLabels:
+      cluster.home.arpa/service-type: dns-admin
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/cilium.io/ciliumloadbalancerippool_v2.json
 apiVersion: "cilium.io/v2"

@@ -57,7 +57,7 @@ spec:
         "lbipam.cilium.io/ips": "192.168.104.1"
         "lbipam.cilium.io/sharing-key": "dns-ips"
       extraLabels: 
-        serviceType: dns
+        cluster.home.arpa/service-type: dns
       type: LoadBalancer
 ---
 apiVersion: gateway.networking.k8s.io/v1
