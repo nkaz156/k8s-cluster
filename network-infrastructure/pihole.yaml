@@ -69,6 +69,8 @@ spec:
   infrastructure:
     annotations:
       lbipam.cilium.io/ips: "192.168.104.2"
+    labels:
+      cluster.home.arpa/service-type: dns-admin
   gatewayClassName: cilium
   listeners:
   - name: pihole-https-listener
