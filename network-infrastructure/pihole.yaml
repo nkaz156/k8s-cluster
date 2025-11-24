@@ -65,9 +65,10 @@ kind: Gateway
 metadata:
   name: pihole-gateway
   namespace: pihole
-  annotations:
-    lbipam.cilium.io/ips: "192.168.104.2"
 spec:
+  infrastructure:
+    annotations:
+      lbipam.cilium.io/ips: "192.168.104.2"
   gatewayClassName: cilium
   listeners:
   - name: pihole-https-listener
