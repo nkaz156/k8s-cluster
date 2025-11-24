@@ -29,7 +29,7 @@ spec:
         - address=/lenovo-01.home.arpa/192.168.100.1
         - address=/dell-01.home.arpa/192.168.100.2
         - address=/dell-02.home.arpa/192.168.100.3
-        - address=/pihole.home.arpa/192.168.104.2
+        - address=/pihole.${INTERNAL_DOMAIN}/192.168.104.2
 
       customCnameEntries:
         # - cname=foo.nas,nas
@@ -65,6 +65,10 @@ kind: Gateway
 metadata:
   name: pihole-gateway
   namespace: pihole
+  annotations:
+    lbipam.cilium.io/ips: "192.168.104.2"
+  labels:
+    serviceType: dns-admin
 spec:
   gatewayClassName: cilium
   listeners:
