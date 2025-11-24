@@ -141,3 +141,12 @@ Remember to replace `longhorn-system` with whatever the name of the problem name
 kubectl run -it --rm debug --image=busybox --restart=Never -- sh
 ```
 creates and removes a busybox pod that you're exec'd into to troubleshoot networking
+
+Ethernet dropping fix:
+ethtool - diagnosing an ethernet connection
+Add `post-up /sbin/ethtool --set-eee $IFACE eee off` indented after the interface you want to disable eee on:
+```
+auto eno1
+iface eno1 inet dhcp
+    post-up /sbin/ethtool --set-eee $IFACE eee off
+```

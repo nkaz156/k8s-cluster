@@ -95,3 +95,44 @@ spec:
     #         secretName: authentik-prod-1-tls
     postgresql:
       enabled: false # Disable Authentik's default postgres database
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: authentik-gateway
+  namespace: authentik
+spec:
+  infrastructure:
+    # annotations: null
+    labels:
+      cluster.home.arpa/service-type: user-infrastructure
+  gatewayClassName: cilium
+  listeners:
+  - name: authentik-https-listener
+    protocol: HTTPS
+    port: 443
+    hostname: sso.${INTERNAL_DOMAIN}
+    tls:
+      certificateRefs:
+       - kind: Secret
+         name: wildcard-tls
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: authentik-https-route
+  namespace: authentik
+spec:
+  parentRefs:
+  - name: authentik-gateway
+    sectionName: authentik-https-listener
+  hostnames:
+  - "sso.${INTERNAL_DOMAIN}"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs: 
+    - name: authentik-authentik-server
+      port: 80
