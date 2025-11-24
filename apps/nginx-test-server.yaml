@@ -58,3 +58,22 @@ spec:
       certificateRefs:
        - kind: Secret
          name: wildcard-tls
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: nginx-test-01-https-route
+spec:
+  parentRefs:
+  - name: tls-gateway
+    sectionName: https-1
+  hostnames:
+  - "nginx-test-01.${INTERNAL_DOMAIN}"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: nginx-test-01
+      port: 80
