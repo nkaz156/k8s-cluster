@@ -64,7 +64,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: pihole-gateway
-  namespace: default
+  namespace: pihole
 spec:
   gatewayClassName: cilium
   listeners:
@@ -81,7 +81,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: pihole-https-route
-  namespace: default
+  namespace: pihole
 spec:
   parentRefs:
   - name: pihole-gateway
