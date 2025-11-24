@@ -4,4 +4,4 @@ kind: Namespace
 metadata:
   name: pihole
   labels:
-    "${SERVICE_DOMAIN}/replicate-tlscert-to": "true"
+    cluster.home.arpa/replicate-tlscert-to: "true"

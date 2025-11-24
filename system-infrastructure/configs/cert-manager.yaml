@@ -52,7 +52,7 @@ spec:
     annotations:
       replicator.v1.mittwald.de/replicate-to: "default"
       replicator.v1.mittwald.de/replicate-to-matching: >
-        ${SERVICE_DOMAIN}/replicate-tlscert-to=true
+        cluster.home.arpa/replicate-tlscert-to=true
 
   dnsNames:
   - '${INTERNAL_DOMAIN}'
