@@ -5,5 +5,5 @@ metadata:
   name: mend
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1h
   url: https://mend.github.io/renovate-ce-ee

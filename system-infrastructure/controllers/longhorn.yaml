@@ -14,7 +14,7 @@ spec:
         name: longhorn-repo
         namespace: flux-system
       version: v1.9.0
-  interval: 5m0s
+  interval: 1h
   storageNamespace: longhorn-system
   targetNamespace: longhorn-system
   values:

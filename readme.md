@@ -168,37 +168,3 @@ This is great, but if you want to update all of the retryIntervals across the re
 find . -type f -name "*.yaml" -print0
 ```
 Recursively finds all files (`-type f`) in the current working directory (`.`) with a `.yaml` file extension (`-name "*.yaml"`) in a format suitable for `xargs -0` (`-print0`) - this prints null characters as delimiters. `-X` is also an option.
-
-This is used to update a key value across the entire repo, in conjunction with `xargs` and `yq`
-
-```bash
-find . -type f -name "*.yaml" -print0 \
-| xargs -0 \
-yq 'select(.apiVersion == "*.fluxcd.io/*") | (.spec.interval | .spec.retryInterval | .spec.timeout)'
-```
-
-```bash
-find . -type f -name "*.yaml" -print0 \
-| xargs -0 \
-yq \
-'select(.apiVersion == "*.fluxcd.io/*") |
-(.spec.interval)'
-```
-
-```bash
-find . -type f -name "*.yaml" -print0 \
-| xargs -0 \
-yq -i \
-'select(.apiVersion == "*.fluxcd.io/*") |
-(.spec.interval = "1h") |
-(.spec.retryInterval = "1m") |
-(.spec.timeout = "5m")'
-```
-
-```bash
-find . -type f -name "*.yaml" -print0 \
-| xargs -0 -I {} \
-yq -i \
-'select(.apiVersion == "*.fluxcd.io/*") |
-(.spec.interval = "1h")' {}
-```

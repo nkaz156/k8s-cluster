@@ -49,7 +49,7 @@ spec:
         name: authentik-repo
         namespace: flux-system
       version: 2025.10.1
-  interval: 10m0s
+  interval: 1h
   storageNamespace: authentik
   targetNamespace: authentik
   valuesFrom:

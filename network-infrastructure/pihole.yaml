@@ -14,7 +14,7 @@ spec:
         name: mojo2600
         namespace: flux-system
       version: 2.34.0
-  interval: 5m0s
+  interval: 1h
   releaseName: pihole
   storageNamespace: pihole
   targetNamespace: pihole

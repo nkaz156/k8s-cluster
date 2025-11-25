@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: cilium
       version: 1.18.3
-  interval: 5m0s
+  interval: 1h
   storageNamespace: kube-system
   targetNamespace: kube-system
   install:

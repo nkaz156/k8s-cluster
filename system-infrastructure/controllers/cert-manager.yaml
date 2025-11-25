@@ -14,7 +14,7 @@ spec:
         name: cert-manager
         namespace: flux-system
       version: 1.19.1
-  interval: 5m0s
+  interval: 1h
   releaseName: cert-manager
   storageNamespace: cert-manager
   targetNamespace: cert-manager

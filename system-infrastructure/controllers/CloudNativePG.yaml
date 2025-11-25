@@ -13,6 +13,6 @@ spec:
         kind: HelmRepository
         name: cnpg
         namespace: flux-system
-  interval: 1m0s
+  interval: 1h
   storageNamespace: cnpg-system
   targetNamespace: cnpg-system
