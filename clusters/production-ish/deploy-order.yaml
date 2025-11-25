@@ -6,7 +6,7 @@ metadata:
   name: 01-namespaces
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 1h
   retryInterval: 1m
   timeout: 5m
   path: ./namespaces
@@ -23,7 +23,7 @@ metadata:
   name: 02-repositories
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 1h
   retryInterval: 1m
   timeout: 5m
   path: ./repositories
@@ -42,22 +42,21 @@ metadata:
   name: 03-secrets
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 1h
   retryInterval: 1m
   timeout: 5m
   sourceRef:
     kind: GitRepository
-    name: secrets-repo  # References your private repo
-  path: ./clusters/production  # Path within secrets repo
+    name: secrets-repo # References your private repo
+  path: ./clusters/production # Path within secrets repo
   prune: true
   decryption:
     provider: sops
     secretRef:
-      name: sops-age  # Your age key secret
+      name: sops-age # Your age key secret
   wait: true
   dependsOn:
     - name: 02-repositories
-
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -66,7 +65,7 @@ metadata:
   name: 04-crds
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 1h
   retryInterval: 1m
   timeout: 5m
   path: ./crds
@@ -85,7 +84,7 @@ metadata:
   name: 05-system-infrastructure-controllers
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 1h
   retryInterval: 1m
   timeout: 5m
   path: ./system-infrastructure/controllers
@@ -108,7 +107,7 @@ metadata:
   name: 06-system-infrastructure-configs
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 1h
   retryInterval: 1m
   timeout: 5m
   path: ./system-infrastructure/configs
@@ -124,14 +123,13 @@ spec:
       - kind: Secret
         name: cluster-secrets
 ---
----
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: 07-network-infrastructure
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 1h
   retryInterval: 1m
   timeout: 5m
   path: ./network-infrastructure
@@ -147,14 +145,13 @@ spec:
       - kind: Secret
         name: cluster-secrets
 ---
----
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: 08-user-infrastructure
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 1h
   retryInterval: 1m
   timeout: 5m
   path: ./user-infrastructure
@@ -176,7 +173,7 @@ metadata:
   name: 09-apps
   namespace: flux-system
 spec:
-  interval: 1m
+  interval: 1h
   retryInterval: 1m
   timeout: 5m
   path: ./apps

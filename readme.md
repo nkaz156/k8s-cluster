@@ -150,3 +150,55 @@ auto eno1
 iface eno1 inet dhcp
     post-up /sbin/ethtool --set-eee $IFACE eee off
 ```
+
+`yq` lets you programatically interact with `.yaml` files, for instance:
+```bash
+yq -i 'select(.apiVersion == "*.fluxcd.io/*") | (.spec.interval = "1h")' deploy-order.yaml
+```
+`yq` edits the file in place (`-i`), selecting all subfiles with the specified `.apiVersion`, then setting `.spec.interval` to 1 hour.
+
+You can also pipe in other options, like setting the retryInterval and timeout here.
+```bash
+yq -i 'select(.apiVersion == "*.fluxcd.io/*") | (.spec.interval = "1h") | (.spec.retryInterval = "1m") | (.spec.timeout = "5m")' deploy-order.yaml
+```
+
+This is great, but if you want to update all of the retryIntervals across the repository, you can use find and xargs.
+
+```bash
+find . -type f -name "*.yaml" -print0
+```
+Recursively finds all files (`-type f`) in the current working directory (`.`) with a `.yaml` file extension (`-name "*.yaml"`) in a format suitable for `xargs -0` (`-print0`) - this prints null characters as delimiters. `-X` is also an option.
+
+This is used to update a key value across the entire repo, in conjunction with `xargs` and `yq`
+
+```bash
+find . -type f -name "*.yaml" -print0 \
+| xargs -0 \
+yq 'select(.apiVersion == "*.fluxcd.io/*") | (.spec.interval | .spec.retryInterval | .spec.timeout)'
+```
+
+```bash
+find . -type f -name "*.yaml" -print0 \
+| xargs -0 \
+yq \
+'select(.apiVersion == "*.fluxcd.io/*") |
+(.spec.interval)'
+```
+
+```bash
+find . -type f -name "*.yaml" -print0 \
+| xargs -0 \
+yq -i \
+'select(.apiVersion == "*.fluxcd.io/*") |
+(.spec.interval = "1h") |
+(.spec.retryInterval = "1m") |
+(.spec.timeout = "5m")'
+```
+
+```bash
+find . -type f -name "*.yaml" -print0 \
+| xargs -0 -I {} \
+yq -i \
+'select(.apiVersion == "*.fluxcd.io/*") |
+(.spec.interval = "1h")' {}
+```
