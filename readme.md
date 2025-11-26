@@ -24,6 +24,7 @@ I am not a software professional or DevOps engineer, so while I try to keep ever
 
 
 ## Helpful resources:
+- Budiman Jojo's [Talhelper](https://github.com/budimanjojo/talhelper) is a great way to rapidly bootstrap a Talos cluster and automate away a lot of work.
 - [Kubesearch](https://kubesearch.dev/) - search through all github repos tagged `k8s-at-home` or `kubesearch`
 - [Artifacthub](https://artifacthub.io/) - large, public helm chart aggregator
 
