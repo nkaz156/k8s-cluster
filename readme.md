@@ -1,15 +1,38 @@
-# Cluster GitOps repo:
-This repo is for an already bootstrapped cluster. It uses Cilium as a CNI and kube-proxy replacement, and Flux to manage deployment of software. It also uses Cilium as a gatewayAPI provider and as a load balancer via L2 announcements (I'll get around to BGP sometime when I get a better router).
+# Introduction:
+This repo provides declarative configuration management for my kubernetes cluster, which is still in its infancy, but some day will have a lot of cool services. Currently, I have my GitOps repos separated into this one, a private repo to hold sops-encrypted secrets, and a private repo which holds my talhelper configuration. 
 
-The goal is to have a pseudo-production cluster that can hum along for months on end without needing maintenance, with only the necessary compromises to run on cheap hardware.
+I currently use Cilium as a CNI and kube-proxy replacement, and Flux to manage deployment of software. I also uses Cilium as a GatewayAPI provider and as a load balancer via L2 announcements (I'll get around to BGP sometime when I get a better router).
 
-Helpful resources:
-- [Kubesearch](https://kubesearch.dev/)
+The goal is to have a pseudo-production cluster that can hum along for months on end without needing maintenance, while sipping power. I'm currently running on a set of three thin clients from Dell and Lenovo, each of which runs proxmox and hosts a Talos worker and control plane. At some point, I'd like to get more thin clients and move away from the additional resource demands of a hypervisor, but this setup works well for now, and it's very easy to change configurations or fix things I break along the way.
+
+I am not a software professional or DevOps engineer, so while I try to keep everything in line with kubernetes/cybersecurity best practices and err towards overhardening, this is a complex project with many dependencies. I am currently not exposing anything to the internet and use a VPN ([Netbird](https://netbird.io/), it's amazing) to access hosted services remotely.
+
+## Structure (In rollout order):
+ - `clusters/production-ish` is the target directory for Flux. All other directories Flux watches are specified by kustomizations in `rollout.yaml`. The names of the kustomizations are prefixed by numbers in order to have them display neatly in the flux CLI.
+ - `namespaces` holds any namespaces which contain various apps/app stacks
+ - `repositories` holds all Flux repository sources
+ - secrets are stored in a private repository, so `secrets-demo` is a non-functional minimal look into that repo. SOPS is clunky and doesn't handle secret rotation automatically, but it avoids any of the chicken and egg problems associated with self-hosting a vault instance and also minimizes cloud dependencies.
+ - `crds` holds custom resource definitions which are needed for various system services, but not managed by helm releases. 
+ - `system-infrastructure` holds the base-level deployments which run the cluster. Any configuration is declarative through this repo, so these should ideally only be interacted with through the monitoring stack. `system-infrastructure` is split between `configs` and `controllers`. Controllers houses the source helm release/deployment, configs houses the objects managed by the controllers (cilium LB IP pools, Cert manager issuers, etc.)
+ - `user-infrastructure` houses software like sso providers, metrics dashboards, pgadmin, or other things an administrator may administrate. 
+ - `apps` holds any other deployments which end users will use. Right now it's just a demo instance of nginx I set up to learn about deployments without helm.
+
+## Inspirations:
+ - anokfireball's [homelab-as-code](https://github.com/anokfireball/homelab-as-code) was a major help in structuring this repository along flux best practices, and in finding core services to use.
+ - onedr0p's [cluster-template](https://github.com/onedr0p/cluster-template) and [home-ops](https://github.com/onedr0p/home-ops) has also informed my service selection and inspired me to use taskfiles or just to automate the bootstrap process.
+ - [DaTosh Blog](https://blog.kammel.dev/post/k8s_home_lab_2025_01/) gives a simple, digestible breakdown of setting up flux
 
 
+## Helpful resources:
+- [Kubesearch](https://kubesearch.dev/) - search through 
 
+## Lessons Learned:
+- Set up the repo such that the path you give to flux only contains kustomizations. This is important to having control over flux's rollout order.
+- Make sure the install sequencing installs deployments and their corresponding CRDs before it tries to create objects of the corresponding custom resources. Example: Flux got stuck trying to create a `ClusterIssuer` before installing `cert-manager`. This is what prompted me to restructure the repo into its current form. Before, I had all apps in flux's main watched path folder.
+ - Just send it, it's GitOpsified for a reason. Disaster recovery is pretty simple
 
-## Deploying Cilium (from [Talos docs](https://docs.siderolabs.com/kubernetes-guides/cni/deploying-cilium) and [Cilium docs](https://docs.cilium.io/en/stable/network/l2-announcements/)):
+## Current bootstrap process (Non-automated)
+### Deploying Cilium (from [Talos docs](https://docs.siderolabs.com/kubernetes-guides/cni/deploying-cilium) and [Cilium docs](https://docs.cilium.io/en/stable/network/l2-announcements/)):
 
 ```bash
 helm repo add cilium https://helm.cilium.io/
@@ -41,7 +64,7 @@ helm install \
 
 With the Cilium CLI installed 
 
-## Fluxifying it:
+### Fluxifying it (First start only):
 Converting the cilium installation to flux HelmRelease format so that Flux can manage its updates from here on
 
 1. Create the Helm repository source:
@@ -71,7 +94,7 @@ flux create helmrelease cilium \
 
 This process also generalizes to other helm charts if you want to do an easy deployment with helm before committing the app to Github.
 
-## Deploying Flux:
+### Deploying Flux:
 1. Create a fine-grained personal access token to give Flux access to the repo (https://github.com/settings/personal-access-tokens). 
 This way we can use the principle of least privilege by only allowing Flux access to the specific repo.
 
@@ -125,24 +148,12 @@ kubectl get namespace longhorn-system -o json \
 
 Remember to replace `longhorn-system` with whatever the name of the problem namespace is.
 
-
-## Credits:
- - https://blog.kammel.dev/post/k8s_home_lab_2025_01/
-
-## Lessons Learned:
-
-- Set up the repo such that the path you give to flux only contains kustomizations. This is important for install sequencing.
-- Make sure the install sequencing installs deployments and CRDs before it tries to create the deployment's custom resources. Example: Flux got stuck trying to create a `ClusterIssuer` before installing `cert-manager`. This prompted me to restructure the repo.
-
-
-## Troubleshooting: 
-
 ```bash
 kubectl run -it --rm debug --image=busybox --restart=Never -- sh
 ```
 creates and removes a busybox pod that you're exec'd into to troubleshoot networking
 
-Ethernet dropping fix:
+Ethernet dropping fix for Lenovo M720q (eee on with incompatible switch):
 ethtool - diagnosing an ethernet connection
 Add `post-up /sbin/ethtool --set-eee $IFACE eee off` indented after the interface you want to disable eee on:
 ```

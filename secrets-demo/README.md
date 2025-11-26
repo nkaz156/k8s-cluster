@@ -1,13 +1,25 @@
 # Secrets workflow:
 
-I store my secrets in a private git repo (encrypted with SOPS and age) and recommend you do the same. This repo simply holds the Kustomize and source files to point Flux at the private repo.
-FluxCD can work with multiple Git repositories, so you can keep your public configuration separate from your private secrets.
+I store my secrets in a private git repo (encrypted with SOPS and age) and recommend you do the same. This repo just provides a look into what that git repo looks like. Flux is not pointed at it and doesn't know about its existence. The age key here is just a demo key. The `kustomization` pointing to my secrets repo is in `rollout.yaml` and the `GitRepository` source is in `repositories/`
 
-Here's how to set it up:
+**WARNING:** Keep a `.gitignore` file in your secrets repo to avoid committing unencrypted secrets - mine is below. It ignores everything, then exempts everything ending in `.sops.yaml`. This is critical even in a private repo. I only have an unencrypted secret here as a demo.
+```.gitignore
+*
+!*.sops.yaml
+```
+
+You can encrypt a secret by running:
+```bash
+sops -e example-secret.yaml > example-secret.sops.yaml
+```
+Currently I just do this per-secret every time I create a new one
+
+
+Here's how I set this up:
 
 ## 1. Create a Separate GitRepository Source
 
-Create a second `GitRepository` resource that points to your private secrets repo:
+Create a `GitRepository` resource that points to your private secrets repo:
 
 ```yaml
 apiVersion: source.toolkit.fluxcd.io/v1
