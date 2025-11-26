@@ -24,7 +24,8 @@ I am not a software professional or DevOps engineer, so while I try to keep ever
 
 
 ## Helpful resources:
-- [Kubesearch](https://kubesearch.dev/) - search through 
+- [Kubesearch](https://kubesearch.dev/) - search through all github repos tagged `k8s-at-home` or `kubesearch`
+- [Artifacthub](https://artifacthub.io/) - large, public helm chart aggregator
 
 ## Lessons Learned:
 - Set up the repo such that the path you give to flux only contains kustomizations. This is important to having control over flux's rollout order.
