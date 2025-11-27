@@ -19,7 +19,7 @@ I am not a software professional or DevOps engineer, so while I try to keep ever
 
 ## Inspirations:
  - anokfireball's [homelab-as-code](https://github.com/anokfireball/homelab-as-code) was a major help in structuring this repository along flux best practices, and in finding core services to use.
- - onedr0p's [cluster-template](https://github.com/onedr0p/cluster-template) and [home-ops](https://github.com/onedr0p/home-ops) has also informed my service selection and inspired me to use taskfiles or just to automate the bootstrap process.
+ - onedr0p's [cluster-template](https://github.com/onedr0p/cluster-template) and [home-ops](https://github.com/onedr0p/home-ops) has also informed my service selection and inspired me to implement taskfiles or just in the future to automate the bootstrap process.
  - [DaTosh Blog](https://blog.kammel.dev/post/k8s_home_lab_2025_01/) gives a simple, digestible breakdown of setting up flux
 
 
@@ -27,6 +27,8 @@ I am not a software professional or DevOps engineer, so while I try to keep ever
 - Budiman Jojo's [Talhelper](https://github.com/budimanjojo/talhelper) is a great way to rapidly bootstrap a Talos cluster and automate away a lot of work.
 - [Kubesearch](https://kubesearch.dev/) - search through all github repos tagged `k8s-at-home` or `kubesearch`
 - [Artifacthub](https://artifacthub.io/) - large, public helm chart aggregator
+- [yq](https://github.com/mikefarah/yq) - makes working with multiple yaml files a lot easier
+- [DeepWiki](https://deepwiki.org/) is a great tool to explore how anything in any git repo works
 
 ## Lessons Learned:
 - Set up the repo such that the path you give to flux only contains kustomizations. This is important to having control over flux's rollout order.
