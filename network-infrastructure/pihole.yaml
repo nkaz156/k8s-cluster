@@ -19,6 +19,10 @@ spec:
   storageNamespace: pihole
   targetNamespace: pihole
   values:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 100Mi
     admin:
       existingSecret: pihole-creds
     image:
