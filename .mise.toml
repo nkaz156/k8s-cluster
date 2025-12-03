@@ -1,5 +1,6 @@
 [env]
 SECRETS_DIR = "{{config_root}}/../secrets"
+TALSECRET_PATH = "{{env.SECRETS_DIR}}/talos/talsecret.sops.yaml"
 
 [tools]
 "aqua:fluxcd/flux2" = "2.7.5"
